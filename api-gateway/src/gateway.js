@@ -30,6 +30,8 @@ function setupCORS(req, res, next) {
 
 // Función para determinar qué servicio usar
 function getTargetService(pathname) {
+
+    
     if (pathname.startsWith('/auth')) {
         return config.services.auth;
     } else if (pathname.startsWith('/academic')) {
@@ -67,6 +69,12 @@ const server = http.createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true);
     const pathname = parsedUrl.pathname;
 
+        if (pathname === '/ping') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'pong' }));
+        return;
+    }
+
     // Ejecutar middlewares
     logRequest(req, res, () => {
         setupCORS(req, res, () => {
@@ -86,12 +94,13 @@ const server = http.createServer((req, res) => {
 });
 
 // Iniciar servidor
-server.listen(config.port, () => {
+server.listen(config.port, '0.0.0.0', () => {
     console.log(`API Gateway iniciado en puerto ${config.port}`);
     console.log(`Servicios configurados:`);
     console.log(`- Auth Service: ${config.services.auth}`);
     console.log(`- Academic Service: ${config.services.academic}`);
     console.log(`- Attendance Service: ${config.services.attendance}`);
 });
+
 
 console.log('Servidor iniciándose...');
