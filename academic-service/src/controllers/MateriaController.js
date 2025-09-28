@@ -233,6 +233,36 @@ class MateriaController {
         }
     }
 
+
+    async generarQR(req, res) {
+        try {
+            const { materia_id, horario_id, docente_id } = await HttpHelper.parseBody(req);
+
+            console.log('MateriaController.generarQR called with:', { materia_id, horario_id, docente_id });
+
+            const resultado = await this.negocioMateria.generarQR(materia_id, horario_id, docente_id);
+
+            if (!resultado.success) {
+                switch (resultado.error) {
+                    case 'HORARIO_NO_ENCONTRADO':
+                        return HttpHelper.sendJSON(res, 404, { error: resultado.message });
+                    case 'DIA_INCORRECTO':
+                        return HttpHelper.sendJSON(res, 400, { error: resultado.message });
+                    default:
+                        return HttpHelper.sendJSON(res, 500, { error: resultado.message });
+                }
+            }
+
+            HttpHelper.sendJSON(res, 200, {
+                message: 'QR generado exitosamente',
+                qr: resultado.data
+            });
+
+        } catch (error) {
+            console.error('Error en MateriaController.generarQR:', error);
+            HttpHelper.sendJSON(res, 500, { error: 'Error interno del servidor' });
+        }
+    }
 }
 
 module.exports = MateriaController;

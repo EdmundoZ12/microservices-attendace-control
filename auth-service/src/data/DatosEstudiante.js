@@ -7,8 +7,8 @@ class DatosEstudiante extends DatosUsuario {
 
     async crear(nombre, apellido, email, password, carrera) {
         try {
-            // Usar método heredado del padre
-            const usuario = await this.crear(nombre, apellido, email, password, 'estudiante');
+            // ✅ CORRECTO - Usar super para llamar al método del padre
+            const usuario = await super.crear(nombre, apellido, email, password, 'estudiante');
 
             // Crear registro específico de estudiante
             await this.db.query("INSERT INTO estudiante (usuario_id, carrera) VALUES ($1, $2)", [usuario.id, carrera]);
@@ -22,8 +22,8 @@ class DatosEstudiante extends DatosUsuario {
 
     async actualizar(id, nombre, apellido, email, carrera) {
         try {
-            // Usar método heredado del padre
-            const usuario = await this.actualizar(id, nombre, apellido, email);
+            // ✅ CORRECTO - Usar super para llamar al método del padre
+            const usuario = await super.actualizar(id, nombre, apellido, email);
 
             // Actualizar datos específicos de estudiante
             await this.db.query("UPDATE estudiante SET carrera = $1 WHERE usuario_id = $2", [carrera, id]);

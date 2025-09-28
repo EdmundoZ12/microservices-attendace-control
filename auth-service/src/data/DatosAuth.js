@@ -8,7 +8,7 @@ class DatosAuth extends DatosUsuario {
     async login(email) {
         try {
             // Usar método heredado del padre
-            return await this.obtenerUsuarioPorEmail(email);
+            return await this.obtenerPorEmail(email);
         } catch (error) {
             console.error('Error en DatosAuth.login:', error);
             throw error;

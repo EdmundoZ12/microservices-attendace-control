@@ -1,6 +1,7 @@
 const DatosMateria = require('../data/DatosMateria');
 const DatosHorario = require('../data/DatosHorario');
-
+const jwt = require('jsonwebtoken');
+const QRCode = require('qrcode');
 class NegocioMateria {
     constructor() {
         this.datosMateria = new DatosMateria();
@@ -193,6 +194,77 @@ class NegocioMateria {
 
         } catch (error) {
             console.error('Error en NegocioMateria.eliminarTodosHorarios:', error);
+            return { success: false, error: 'ERROR_INTERNO', message: 'Error interno del sistema' };
+        }
+    }
+
+
+    async generarQR(materia_id, horario_id, docente_id) {
+        try {
+            // Obtener horario para validar día
+            const horario = await this.datosHorario.obtenerPorId(horario_id);
+            if (!horario) {
+                return { success: false, error: 'HORARIO_NO_ENCONTRADO', message: 'Horario no encontrado' };
+            }
+
+            // Validar que es el día correcto
+            const hoy = new Date();
+            const diasSemana = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
+            const diaActual = diasSemana[hoy.getDay()];
+
+            if (horario.dia_semana !== diaActual) {
+                return { success: false, error: 'DIA_INCORRECTO', message: `Hoy es ${diaActual}, la clase es ${horario.dia_semana}` };
+            }
+
+            // Crear payload JWT
+            const fechaActual = hoy.toISOString().split('T')[0]; // YYYY-MM-DD
+            const expiracion = Math.floor(Date.now() / 1000) + (2 * 60 * 60); // 2 horas
+
+            const payload = {
+                materia_id: materia_id,
+                horario_id: horario_id,
+                docente_id: docente_id,
+                fecha: fechaActual,
+                dia_semana: horario.dia_semana,
+                hora_inicio: horario.hora_inicio,
+                hora_fin: horario.hora_fin,
+                exp: expiracion
+            };
+
+
+            console.log(process.env.JWT_SECRET);
+
+
+            // Generar JWT
+            const qrToken = jwt.sign(payload, process.env.JWT_SECRET);
+
+            // Generar imagen QR
+            const qrImage = await QRCode.toDataURL(qrToken, {
+                width: 300,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            });
+
+            return {
+                success: true,
+                data: {
+                    qr_token: qrToken,
+                    qr_image: qrImage,
+                    expires_at: new Date(expiracion * 1000).toISOString(),
+                    horario: {
+                        id: horario.id,
+                        dia_semana: horario.dia_semana,
+                        hora_inicio: horario.hora_inicio,
+                        hora_fin: horario.hora_fin
+                    }
+                }
+            };
+
+        } catch (error) {
+            console.error('Error en NegocioMateria.generarQR:', error);
             return { success: false, error: 'ERROR_INTERNO', message: 'Error interno del sistema' };
         }
     }

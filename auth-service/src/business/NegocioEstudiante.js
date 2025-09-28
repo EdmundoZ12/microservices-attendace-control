@@ -14,6 +14,7 @@ class NegocioEstudiante {
                 return { success: false, error: 'EMAIL_EXISTE', message: 'El email ya está registrado' };
             }
 
+            console.log('Creando estudiante:', { nombre, apellido, email, carrera });
             // Crear estudiante
             const resultado = await this.datosEstudiante.crear(nombre, apellido, email, password, carrera);
             return { success: true, data: resultado };
