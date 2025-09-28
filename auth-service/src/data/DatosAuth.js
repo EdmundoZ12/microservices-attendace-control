@@ -1,16 +1,16 @@
-const Database = require("../config/database");
+const DatosUsuario = require('./DatosUsuario');
 
-class DatosAuth {
+class DatosAuth extends DatosUsuario {
     constructor() {
-        this.db = new Database();
+        super();
     }
 
-    async obtenerUsuarioPorEmail(email) {
+    async login(email) {
         try {
-            const query = await this.db.query("SELECT * FROM usuario WHERE email=$1", [email]);
-            return query.rows[0] || null;
+            // Usar método heredado del padre
+            return await this.obtenerUsuarioPorEmail(email);
         } catch (error) {
-            console.error('Error al obtener usuario por email:', error);
+            console.error('Error en DatosAuth.login:', error);
             throw error;
         }
     }

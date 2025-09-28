@@ -10,7 +10,7 @@ class NegocioAuth {
     async login(email, password) {
         try {
             // Obtener usuario de la base de datos
-            const usuario = await this.datosAuth.obtenerUsuarioPorEmail(email);
+            const usuario = await this.datosAuth.login(email);
             if (!usuario) {
                 return { success: false, error: 'CREDENCIALES_INVALIDAS', message: 'Email o contraseña incorrectos' };
             }
