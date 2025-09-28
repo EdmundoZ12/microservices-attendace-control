@@ -2,13 +2,11 @@ require('dotenv').config();
 const http = require('http');
 const url = require('url');
 
-const MateriaRoutes = require('./routes/MateriaRoutes');
-const AsignacionRoutes = require('./routes/AsignacionRoutes');
+const AsistenciaRoutes = require('./routes/AsistenciaRoutes');
 
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3003;
 
-const materiaRoutes = new MateriaRoutes();
-const estudianteMateriaRoutes = new AsignacionRoutes();
+const asistenciaRoutes = new AsistenciaRoutes();
 
 function handleCORS(req, res) {
     if (req.method === 'OPTIONS') {
@@ -35,18 +33,14 @@ async function router(req, res) {
 
         if (pathname === '/' && method === 'GET') {
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Academic Service funcionando' }));
+            res.end(JSON.stringify({ message: 'Attendance Service funcionando' }));
             return;
         }
 
-        let handled = await materiaRoutes.handleRoute(req, res, pathname, method, parsedUrl);
+        let handled = await asistenciaRoutes.handleRoute(req, res, pathname, method, parsedUrl);
 
         if (!handled) {
-            handled = await materiaRoutes.handleRoute(req, res, pathname, method, parsedUrl);
-        }
-
-        if (!handled) {
-            handled = await estudianteMateriaRoutes.handleRoute(req, res, pathname, method, parsedUrl);
+            handled = await asistenciaRoutes.handleRoute(req, res, pathname, method, parsedUrl);
         }
 
         if (!handled) {
@@ -68,7 +62,7 @@ async function router(req, res) {
 const server = http.createServer(router);
 
 server.listen(PORT, () => {
-    console.log(`Academic Service escuchando en el puerto ${PORT}`);
+    console.log(`Attendance Service escuchando en el puerto ${PORT}`);
 });
 
 process.on('SIGTERM', () => {

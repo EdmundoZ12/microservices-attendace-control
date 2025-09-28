@@ -49,6 +49,9 @@ async function router(req, res) {
         // Intentar con rutas de estudiante
         let handled = await studentRoutes.handleRoute(req, res, pathname, method, parsedUrl);
 
+        console.log(`Ruta manejada: ${handled}`);
+        
+
         // Si no fue manejada, intentar con rutas de docente
         if (!handled) {
             handled = await teacherRoutes.handleRoute(req, res, pathname, method, parsedUrl);

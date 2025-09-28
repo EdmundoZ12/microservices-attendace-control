@@ -75,6 +75,17 @@ class MateriaRoutes {
                     return true;
                 }
 
+            case '/materia/qr':
+                if (method === 'POST') {
+                    await this.controller.generarQR(req, res);
+                    return true;
+                } else {
+                    res.writeHead(405, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Método no permitido' }));
+                    return true;
+                }
+
+
             default:
                 return false;
         }
