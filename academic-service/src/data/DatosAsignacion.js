@@ -8,7 +8,7 @@ class DatosAsignacion {
     async asignar(estudiante_id, materia_id) {
         try {
             const query = await this.db.query(
-                "INSERT INTO estudiante_materia (estudiante_id, materia_id) VALUES ($1, $2) RETURNING *",
+                "INSERT INTO asignacion (estudiante_id, materia_id) VALUES ($1, $2) RETURNING *",
                 [estudiante_id, materia_id]
             );
             return query.rows[0];
@@ -21,7 +21,7 @@ class DatosAsignacion {
     async verificarAsignacion(estudiante_id, materia_id) {
         try {
             const query = await this.db.query(
-                "SELECT * FROM estudiante_materia WHERE estudiante_id = $1 AND materia_id = $2",
+                "SELECT * FROM asignacion WHERE estudiante_id = $1 AND materia_id = $2",
                 [estudiante_id, materia_id]
             );
             return query.rows.length > 0;
@@ -45,7 +45,7 @@ class DatosAsignacion {
         try {
             const query = await this.db.query(
                 `SELECT u.id, u.nombre, u.apellido, u.email, e.carrera 
-                 FROM estudiante_materia em 
+                 FROM asignacion em 
                  JOIN estudiante e ON em.estudiante_id = e.usuario_id 
                  JOIN usuario u ON e.usuario_id = u.id 
                  WHERE em.materia_id = $1 
@@ -63,7 +63,7 @@ class DatosAsignacion {
         try {
             const query = await this.db.query(
                 `SELECT m.id, m.nombre, m.codigo, m.descripcion, m.grupo, m.activo 
-                 FROM estudiante_materia em 
+                 FROM asignacion em 
                  JOIN materia m ON em.materia_id = m.id 
                  WHERE em.estudiante_id = $1 AND m.activo = true 
                  ORDER BY m.nombre`,

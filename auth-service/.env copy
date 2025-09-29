@@ -1,0 +1,17 @@
+# Auth Service Configuration
+PORT=3001
+NODE_ENV=development
+
+# JWT Configuration
+JWT_SECRET=secreto
+JWT_EXPIRES_IN=24h
+
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=db_attendance_control
+DB_USER=postgres
+DB_PASSWORD=ejzr1203
+
+# Logging
+LOG_LEVEL=info

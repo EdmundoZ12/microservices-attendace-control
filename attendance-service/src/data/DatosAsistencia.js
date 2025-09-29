@@ -78,7 +78,7 @@ class DatosAsistencia {
     async verificarEstudianteInscrito(estudiante_id, materia_id) {
         try {
             const query = await this.db.query(
-                'SELECT * FROM estudiante_materia WHERE estudiante_id = $1 AND materia_id = $2',
+                'SELECT * FROM asignacion WHERE estudiante_id = $1 AND materia_id = $2',
                 [estudiante_id, materia_id]
             );
             return query.rows.length > 0;

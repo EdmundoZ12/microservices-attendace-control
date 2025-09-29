@@ -120,10 +120,10 @@ class NegocioAsistencia {
         }
     }
 
-    async obtenerAsistenciasMateria(materia_id, fecha = null) {
+    async obtenerAsistenciasMateria(materia_id) {
         try {
-            const resultado = await this.datosAsistencia.obtenerAsistenciasPorMateria(materia_id, fecha);
-            return { success: true, data: resultado };
+            const resultado = await this.datosAsistencia.obtenerAsistenciasPorMateria(materia_id);
+            return { success: true, data: resultado };s
         } catch (error) {
             console.error('Error en NegocioAsistencia.obtenerAsistenciasMateria:', error);
             return { success: false, error: 'ERROR_INTERNO', message: 'Error interno del sistema' };
