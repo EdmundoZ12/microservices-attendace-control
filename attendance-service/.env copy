@@ -1,0 +1,16 @@
+# Academic Service Configuration
+PORT=3003
+NODE_ENV=development
+
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=db_attendance_control
+DB_USER=postgres
+DB_PASSWORD=ejzr1203
+
+# JWT Configuration
+JWT_SECRET=secreto
+
+# Logging
+LOG_LEVEL=info

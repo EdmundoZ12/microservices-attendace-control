@@ -1,0 +1,20 @@
+# API Gateway Configuration
+GATEWAY_PORT=3000
+
+# JWT Configuration
+JWT_SECRET=secreto
+
+# Microservices URLs
+AUTH_SERVICE_URL=http://localhost:3001
+ACADEMIC_SERVICE_URL=http://localhost:3002
+ATTENDANCE_SERVICE_URL=http://localhost:3003
+
+# Environment
+NODE_ENV=development
+
+# Logging
+LOG_LEVEL=info
+LOGGING_ENABLED=true
+
+# CORS
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8080
