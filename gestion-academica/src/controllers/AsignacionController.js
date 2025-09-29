@@ -1,4 +1,4 @@
-const NegocioAsignacion = require("../business/NegocioAsignacion");
+const NegocioAsignacion = require("../negocio/NegocioAsignacion");
 const HttpHelper = require('../utils/HttpHelper');
 
 class AsignacionController {

@@ -1,5 +1,5 @@
-const DatosAsignacion = require('../data/DatosAsignacion');
-const DatosMateria = require('../data/DatosMateria');
+const DatosAsignacion = require('../datos/DatosAsignacion');
+const DatosMateria = require('../datos/DatosMateria');
 
 class NegocioAsignacion {
     constructor() {

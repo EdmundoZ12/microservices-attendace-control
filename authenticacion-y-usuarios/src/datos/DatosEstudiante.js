@@ -1,34 +1,30 @@
-const DatosUsuario = require('./DatosUsuario');
+const Database = require("../config/database");
 
-class DatosEstudiante extends DatosUsuario {
+class DatosEstudiante {
     constructor() {
-        super();
+        this.db = new Database();
     }
 
-    async crear(nombre, apellido, email, password, carrera) {
+    async crear(usuario_id, carrera) {
         try {
-            // ✅ CORRECTO - Usar super para llamar al método del padre
-            const usuario = await super.crear(nombre, apellido, email, password, 'estudiante');
-
-            // Crear registro específico de estudiante
-            await this.db.query("INSERT INTO estudiante (usuario_id, carrera) VALUES ($1, $2)", [usuario.id, carrera]);
-
-            return usuario;
+            await this.db.query(
+                "INSERT INTO estudiante (usuario_id, carrera) VALUES ($1, $2)",
+                [usuario_id, carrera]
+            );
+            return { usuario_id, carrera };
         } catch (error) {
             console.error('Error al crear estudiante:', error);
             throw error;
         }
     }
 
-    async actualizar(id, nombre, apellido, email, carrera) {
+    async actualizar(usuario_id, carrera) {
         try {
-            // ✅ CORRECTO - Usar super para llamar al método del padre
-            const usuario = await super.actualizar(id, nombre, apellido, email);
-
-            // Actualizar datos específicos de estudiante
-            await this.db.query("UPDATE estudiante SET carrera = $1 WHERE usuario_id = $2", [carrera, id]);
-
-            return usuario;
+            await this.db.query(
+                "UPDATE estudiante SET carrera = $1 WHERE usuario_id = $2",
+                [carrera, usuario_id]
+            );
+            return { usuario_id, carrera };
         } catch (error) {
             console.error('Error al actualizar estudiante:', error);
             throw error;

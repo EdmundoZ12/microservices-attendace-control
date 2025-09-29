@@ -1,4 +1,4 @@
-const NegocioAuth = require('../business/NegocioAuth');
+const NegocioAuth = require('../negocio/NegocioAuth');
 const HttpHelper = require('../utils/HttpHelper');
 
 class AuthController {

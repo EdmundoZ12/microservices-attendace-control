@@ -1,16 +1,16 @@
-const NegocioDocente = require('../business/NegocioDocente');
+const NegocioEstudiante = require('../negocio/NegocioEstudiante');
 const HttpHelper = require('../utils/HttpHelper');
 
-class DocenteController {
+class EstudianteController {
     constructor() {
-        this.negocioDocente = new NegocioDocente();
+        this.negocioEstudiante = new NegocioEstudiante();
     }
 
     async registrar(req, res) {
         try {
-            const { nombre, apellido, email, password, titulo } = await HttpHelper.parseBody(req);
+            const { nombre, apellido, email, password, carrera } = await HttpHelper.parseBody(req);
 
-            const resultado = await this.negocioDocente.crear(nombre, apellido, email, password, titulo);
+            const resultado = await this.negocioEstudiante.crear(nombre, apellido, email, password, carrera);
 
             if (!resultado.success) {
                 switch (resultado.error) {
@@ -22,27 +22,27 @@ class DocenteController {
             }
 
             HttpHelper.sendJSON(res, 201, {
-                message: 'Docente registrado exitosamente',
-                docente: resultado.data
+                message: 'Estudiante registrado exitosamente',
+                estudiante: resultado.data
             });
 
         } catch (error) {
-            console.error('Error en DocenteController.registrar:', error);
+            console.error('Error en EstudianteController.registrar:', error);
             HttpHelper.sendJSON(res, 500, { error: 'Error interno del servidor' });
         }
     }
 
     async actualizar(req, res) {
         try {
-            const { id, nombre, apellido, email, titulo } = await HttpHelper.parseBody(req);
+            const { id, nombre, apellido, email, carrera } = await HttpHelper.parseBody(req);
 
-            const resultado = await this.negocioDocente.actualizar(id, nombre, apellido, email, titulo);
+            const resultado = await this.negocioEstudiante.actualizar(id, nombre, apellido, email, carrera);
 
             if (!resultado.success) {
                 switch (resultado.error) {
                     case 'EMAIL_INVALIDO':
                         return HttpHelper.sendJSON(res, 400, { error: resultado.message });
-                    case 'DOCENTE_NO_ENCONTRADO':
+                    case 'ESTUDIANTE_NO_ENCONTRADO':
                         return HttpHelper.sendJSON(res, 404, { error: resultado.message });
                     default:
                         return HttpHelper.sendJSON(res, 500, { error: resultado.message });
@@ -50,12 +50,12 @@ class DocenteController {
             }
 
             HttpHelper.sendJSON(res, 200, {
-                message: 'Docente actualizado exitosamente',
-                docente: resultado.data
+                message: 'Estudiante actualizado exitosamente',
+                estudiante: resultado.data
             });
 
         } catch (error) {
-            console.error('Error en DocenteController.actualizar:', error);
+            console.error('Error en EstudianteController.actualizar:', error);
             HttpHelper.sendJSON(res, 500, { error: 'Error interno del servidor' });
         }
     }
@@ -68,13 +68,13 @@ class DocenteController {
                 return HttpHelper.sendJSON(res, 400, { error: 'Email es requerido' });
             }
 
-            const resultado = await this.negocioDocente.buscarPorEmail(email);
+            const resultado = await this.negocioEstudiante.buscarPorEmail(email);
 
             if (!resultado.success) {
                 switch (resultado.error) {
                     case 'EMAIL_INVALIDO':
                         return HttpHelper.sendJSON(res, 400, { error: resultado.message });
-                    case 'DOCENTE_NO_ENCONTRADO':
+                    case 'ESTUDIANTE_NO_ENCONTRADO':
                         return HttpHelper.sendJSON(res, 404, { error: resultado.message });
                     default:
                         return HttpHelper.sendJSON(res, 500, { error: resultado.message });
@@ -82,11 +82,11 @@ class DocenteController {
             }
 
             HttpHelper.sendJSON(res, 200, {
-                docente: resultado.data
+                estudiante: resultado.data
             });
 
         } catch (error) {
-            console.error('Error en DocenteController.obtenerPorEmail:', error);
+            console.error('Error en EstudianteController.obtenerPorEmail:', error);
             HttpHelper.sendJSON(res, 500, { error: 'Error interno del servidor' });
         }
     }
@@ -99,11 +99,11 @@ class DocenteController {
                 return HttpHelper.sendJSON(res, 400, { error: 'ID es requerido' });
             }
 
-            const resultado = await this.negocioDocente.buscarPorId(id);
+            const resultado = await this.negocioEstudiante.buscarPorId(id);
 
             if (!resultado.success) {
                 switch (resultado.error) {
-                    case 'DOCENTE_NO_ENCONTRADO':
+                    case 'ESTUDIANTE_NO_ENCONTRADO':
                         return HttpHelper.sendJSON(res, 404, { error: resultado.message });
                     default:
                         return HttpHelper.sendJSON(res, 500, { error: resultado.message });
@@ -111,32 +111,32 @@ class DocenteController {
             }
 
             HttpHelper.sendJSON(res, 200, {
-                docente: resultado.data
+                estudiante: resultado.data
             });
 
         } catch (error) {
-            console.error('Error en DocenteController.obtenerPorId:', error);
+            console.error('Error en EstudianteController.obtenerPorId:', error);
             HttpHelper.sendJSON(res, 500, { error: 'Error interno del servidor' });
         }
     }
 
     async obtenerTodos(req, res) {
         try {
-            const resultado = await this.negocioDocente.obtenerTodos();
+            const resultado = await this.negocioEstudiante.obtenerTodos();
 
             if (!resultado.success) {
                 return HttpHelper.sendJSON(res, 500, { error: resultado.message });
             }
 
             HttpHelper.sendJSON(res, 200, {
-                docentes: resultado.data
+                estudiantes: resultado.data
             });
 
         } catch (error) {
-            console.error('Error en DocenteController.obtenerTodos:', error);
+            console.error('Error en EstudianteController.obtenerTodos:', error);
             HttpHelper.sendJSON(res, 500, { error: 'Error interno del servidor' });
         }
     }
 }
 
-module.exports = DocenteController;
+module.exports = EstudianteController;

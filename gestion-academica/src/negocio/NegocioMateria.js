@@ -1,5 +1,5 @@
-const DatosMateria = require('../data/DatosMateria');
-const DatosHorario = require('../data/DatosHorario');
+const DatosMateria = require('../datos/DatosMateria');
+const DatosHorario = require('../datos/DatosHorario');
 const jwt = require('jsonwebtoken');
 const QRCode = require('qrcode');
 class NegocioMateria {

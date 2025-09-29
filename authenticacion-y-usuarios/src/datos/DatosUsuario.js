@@ -8,7 +8,7 @@ class DatosUsuario {
 
     async crear(nombre, apellido, email, password, rol) {
         try {
-            const hashPassword = bcrypt.hashSync(password, 10);
+            const hashPassword = await bcrypt.hash(password, 10);
             const query = await this.db.query(
                 "INSERT INTO usuario (nombre, apellido, email, password, rol) VALUES ($1, $2, $3, $4, $5) RETURNING *",
                 [nombre, apellido, email, hashPassword, rol]

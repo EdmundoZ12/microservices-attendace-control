@@ -1,22 +1,27 @@
-const DatosDocente = require('../data/DatosDocente');
+const DatosUsuario = require('../datos/DatosUsuario');
+const DatosDocente = require('../datos/DatosDocente');
 
 class NegocioDocente {
     constructor() {
+        this.datosUsuario = new DatosUsuario();
         this.datosDocente = new DatosDocente();
     }
 
     async crear(nombre, apellido, email, password, titulo) {
         try {
-
             // Verificar si email ya existe
-            const emailExiste = await this.datosDocente.verificarEmail(email);
+            const emailExiste = await this.datosUsuario.verificarEmail(email);
             if (emailExiste) {
                 return { success: false, error: 'EMAIL_EXISTE', message: 'El email ya está registrado' };
             }
 
-            // Crear docente
-            const resultado = await this.datosDocente.crear(nombre, apellido, email, password, titulo);
-            return { success: true, data: resultado };
+            // PASO 1: Crear usuario primero
+            const usuario = await this.datosUsuario.crear(nombre, apellido, email, password, 'docente');
+
+            // PASO 2: Crear docente después
+            await this.datosDocente.crear(usuario.id, titulo);
+
+            return { success: true, data: usuario };
 
         } catch (error) {
             console.error('Error en NegocioDocente.crear:', error);
@@ -26,19 +31,21 @@ class NegocioDocente {
 
     async actualizar(id, nombre, apellido, email, titulo) {
         try {
-            // Validar formato de email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 return { success: false, error: 'EMAIL_INVALIDO', message: 'Formato de email inválido' };
             }
 
-            // Actualizar docente
-            const resultado = await this.datosDocente.actualizar(id, nombre, apellido, email, titulo);
-            if (!resultado) {
+            // PASO 1: Actualizar usuario
+            const usuario = await this.datosUsuario.actualizar(id, nombre, apellido, email);
+            if (!usuario) {
                 return { success: false, error: 'DOCENTE_NO_ENCONTRADO', message: 'Docente no encontrado' };
             }
 
-            return { success: true, data: resultado };
+            // PASO 2: Actualizar docente
+            await this.datosDocente.actualizar(id, titulo);
+
+            return { success: true, data: usuario };
 
         } catch (error) {
             console.error('Error en NegocioDocente.actualizar:', error);
@@ -48,7 +55,6 @@ class NegocioDocente {
 
     async buscarPorEmail(email) {
         try {
-            // Validar formato de email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 return { success: false, error: 'EMAIL_INVALIDO', message: 'Formato de email inválido' };

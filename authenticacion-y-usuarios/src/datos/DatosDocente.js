@@ -1,34 +1,30 @@
-const DatosUsuario = require('./DatosUsuario');
+const Database = require("../config/database");
 
-class DatosDocente extends DatosUsuario {
+class DatosDocente {
     constructor() {
-        super();
+        this.db = new Database();
     }
 
-    async crear(nombre, apellido, email, password, titulo) {
+    async crear(usuario_id, titulo) {
         try {
-            // ✅ CORRECTO - Usar super para llamar al método del padre
-            const usuario = await super.crear(nombre, apellido, email, password, 'docente');
-
-            // Crear registro específico de docente
-            await this.db.query("INSERT INTO docente (usuario_id, titulo) VALUES ($1, $2)", [usuario.id, titulo]);
-
-            return usuario;
+            await this.db.query(
+                "INSERT INTO docente (usuario_id, titulo) VALUES ($1, $2)",
+                [usuario_id, titulo]
+            );
+            return { usuario_id, titulo };
         } catch (error) {
             console.error('Error al crear docente:', error);
             throw error;
         }
     }
 
-    async actualizar(id, nombre, apellido, email, titulo) {
+    async actualizar(usuario_id, titulo) {
         try {
-            // ✅ CORRECTO - Usar super para llamar al método del padre
-            const usuario = await super.actualizar(id, nombre, apellido, email);
-
-            // Actualizar datos específicos de docente
-            await this.db.query("UPDATE docente SET titulo = $1 WHERE usuario_id = $2", [titulo, id]);
-
-            return usuario;
+            await this.db.query(
+                "UPDATE docente SET titulo = $1 WHERE usuario_id = $2",
+                [titulo, usuario_id]
+            );
+            return { usuario_id, titulo };
         } catch (error) {
             console.error('Error al actualizar docente:', error);
             throw error;
