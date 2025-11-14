@@ -1,0 +1,110 @@
+import { IncomingMessage, ServerResponse } from "http";
+import MateriaController from "../controllers/MateriaController";
+
+class MateriaRoutes {
+  private controller: MateriaController;
+
+  constructor() {
+    this.controller = new MateriaController();
+  }
+
+  async handleRoute(
+    req: IncomingMessage,
+    res: ServerResponse,
+    pathname: string,
+    method: string,
+    parsedUrl: any
+  ): Promise<boolean> {
+    switch (pathname) {
+      case "/materia":
+        if (method === "POST") {
+          await this.controller.crear(req, res);
+          return true;
+        } else if (method === "GET") {
+          await this.controller.obtenerPorId(req, res);
+          return true;
+        } else if (method === "PUT") {
+          await this.controller.actualizar(req, res);
+          return true;
+        } else if (method === "PATCH") {
+          await this.controller.cambiarEstado(req, res);
+          return true;
+        } else {
+          res.writeHead(405, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Método no permitido" }));
+          return true;
+        }
+
+      case "/materias":
+        if (method === "GET") {
+          await this.controller.obtenerTodasPorDocente(req, res);
+          return true;
+        } else {
+          res.writeHead(405, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Método no permitido" }));
+          return true;
+        }
+
+      case "/materias/horarios":
+        if (method === "GET") {
+          await this.controller.obtenerHorariosPorMateria(req, res);
+          return true;
+        } else {
+          res.writeHead(405, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Método no permitido" }));
+          return true;
+        }
+
+      case "/materia/horario":
+        if (method === "POST") {
+          await this.controller.agregarHorario(req, res);
+          return true;
+        } else if (method === "PUT") {
+          await this.controller.actualizarHorario(req, res);
+          return true;
+        } else if (method === "DELETE") {
+          await this.controller.eliminarHorario(req, res);
+          return true;
+        } else {
+          res.writeHead(405, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Método no permitido" }));
+          return true;
+        }
+
+      case "/materia/horarios":
+        if (method === "DELETE") {
+          //   await this.controller.eliminarTodosHorarios(req, res);
+          //   return true;
+        } else {
+          res.writeHead(405, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Método no permitido" }));
+          return true;
+        }
+
+      case "/materia/qr":
+        if (method === "POST") {
+          await this.controller.generarQR(req, res);
+          return true;
+        } else {
+          res.writeHead(405, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Método no permitido" }));
+          return true;
+        }
+
+      case "/materia/qr/inscripcion":
+        if (method === "POST") {
+          await this.controller.generarQRInscripcion(req, res);
+          return true;
+        } else {
+          res.writeHead(405, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Método no permitido" }));
+          return true;
+        }
+
+      default:
+        return false;
+    }
+  }
+}
+
+export default MateriaRoutes;

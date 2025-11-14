@@ -1,0 +1,1 @@
+{"version":3,"file":"EstrategiaInscripcion.d.ts","sourceRoot":"","sources":["../../../src/negocio/strategies/EstrategiaInscripcion.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,qBAAqB;IACpC;;;;OAIG;IACH,SAAS,CAAC,KAAK,EAAE,GAAG,GAAG,OAAO,CAAC;QAC7B,OAAO,EAAE,OAAO,CAAC;QACjB,IAAI,CAAC,EAAE,GAAG,CAAC;QACX,KAAK,CAAC,EAAE,MAAM,CAAC;QACf,OAAO,CAAC,EAAE,MAAM,CAAC;KAClB,CAAC,CAAC;CACJ"}
